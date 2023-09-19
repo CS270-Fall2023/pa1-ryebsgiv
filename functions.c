@@ -33,37 +33,86 @@ int getTokens(char *s, char ***args) {
     }
     
     //Start going through the string
-    for (int i = 0; s[i] != '\0'; i++) {
-        if (s[i] == ' ' && s[i+1]!=' ') 
+    int letters=-1; //Variable used to bypass spaces at the very beginning of the string. Example "  Hello". This variable will be negative until the 'H'.
+    int i=0;
+        while(i<numberOfPossibleTokens) 
         {
-            //Sets the last value in the token as NULL
-            s[i] = '\0';
-
-            //Allocate memory for the token
-            (*args)[numberToken] = malloc(strlen (tokenStart)+1);
-            if ((*args)[numberToken] == NULL) {
-                printf("There was a bad memory allocation when a new token was added to tokens\n");
-                return -1;
+            //Checks if the letters have begun in the string
+            if (s[i]!=' ')
+            {
+                letters=1;
             }
-            strcpy((*args)[numberToken],tokenStart);
-            numberToken++; //increase the token count
-            //Check if the number of tokens is within our bounds
-            if (numberToken >= numberOfPossibleTokens) {
-                printf("Went over the token limit\n");
+            if (letters!=1)
+            {
+                tokenStart = &s[i + 1];
+            }
+
+            //Checls for the scenario that there is only one token and no other information in the string. 
+            if (s[i]=='\0'&& numberToken==0){
+                (*args)[numberToken] = malloc(strlen (tokenStart)+1);
+                if ((*args)[numberToken] == NULL) 
+                {
+                    printf("There was a bad memory allocation when a new token was added to tokens\n");
+                    return -1;
+                }
+                strcpy((*args)[numberToken],tokenStart);
+                numberToken++; //increase the token count
+                //Check if the number of tokens is within our bounds
+                if (numberToken >= numberOfPossibleTokens) {
+                    printf("Went over the token limit\n");
+                    break;
+                }
+
+                //Increase the character count
+                tokenStart = &s[i + 1];
+                }
+
+            //Breaks up strings into tokens by seperating by spaces.
+            if (s[i] == ' ' && s[i+1]!=' ' && letters==1) 
+            {   
+                //Sets the last value in the token as NULL
+                s[i] = '\0';
+
+                //Allocate memory for the token
+                (*args)[numberToken] = malloc(strlen (tokenStart)+1);
+                if ((*args)[numberToken] == NULL) 
+                {
+                    printf("There was a bad memory allocation when a new token was added to tokens\n");
+                    return -1;
+                }
+                strcpy((*args)[numberToken],tokenStart);
+                numberToken++; //increase the token count
+                //Check if the number of tokens is within our bounds
+                if (numberToken >= numberOfPossibleTokens) {
+                    printf("Went over the token limit\n");
+                    break;
+                }
+
+                //Increase the character count
+                tokenStart = &s[i + 1];
+
+            }
+            //This is the condition if the string ends without a space
+            if (s[i+1]=='\0'){
+                (*args)[numberToken] = malloc(strlen (tokenStart)+1);
+                if ((*args)[numberToken] == NULL) 
+                {
+                    printf("There was a bad memory allocation when a new token was added to tokens\n");
+                    return -1;
+                }
+                strcpy((*args)[numberToken],tokenStart);
+                numberToken++;
                 break;
             }
-
-            //Increase the character count
-            tokenStart = &s[i + 1];
+            i++;
         }
-    }
-
-    //Create a token at the end of the tokens array which is NULL
-    if ((*args)[numberToken+1] != NULL) {
+        //Create a token at the end of the tokens array which is NULL
+        //Sets the last value in the token as NULL
+    if ((*args)[numberToken] != NULL) {
             //Allocate memory for the token and copy 
             (*args)[numberToken] = malloc(strlen (tokenStart)+1);
-            (*args)[numberToken+1]=NULL;
-            if ((*args)[numberToken+1] != NULL) {
+            (*args)[numberToken]=NULL;
+            if ((*args)[numberToken] != NULL) {
                 printf("There was a bad memory allocation when the final token was added to tokens\n");
                 return -1;
             }

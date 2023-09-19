@@ -1,5 +1,5 @@
 /**
- * @file PA1.c
+ * @file main.c
  * @author Ben Givens
  * @brief  A program that uses a function that will parse a string into tokens (or words), similar to what the shell is required to do.
  * @date 2023-09-14
