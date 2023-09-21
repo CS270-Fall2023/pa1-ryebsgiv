@@ -8,10 +8,10 @@ clean:
 	rm -f main *.o
 
 main:  main.o functions.o
-	$(CC) $(FLAG) functions.o main.o -o main
+	$(CC) $(FLAG) $< functions.o -o $@
 
 main.o: main.c functions.h
-	$(CC) $(FLAG) -c main.c
+	$(CC) $(FLAG) -c $<
 
 functions.o: functions.c functions.h
-	$(CC) $(FLAG) -c functions.c
+	$(CC) $(FLAG) -c $<
