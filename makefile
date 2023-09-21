@@ -1,3 +1,8 @@
+all: main
+
+clean:
+	rm -f main *.o
+
 main:  main.o functions.o
 	gcc functions.o main.o -o main
 
